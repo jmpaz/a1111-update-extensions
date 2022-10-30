@@ -19,9 +19,10 @@ fi
 
 # Iterate over all subdirectories of the extensions folder.
 UPDATED_EXTENSIONS=()
+echo "Updating extensions…" && echo ""
 for dir in $EXTENSIONS_PATH/*/
 do
-    echo "Updating $dir"
+    echo "$dir"
     # Get the current commit hash.
     CURRENT_COMMIT=$(git -C $dir rev-parse HEAD)
     git -C $dir pull
@@ -31,15 +32,16 @@ do
     if [ "$CURRENT_COMMIT" != "$NEW_COMMIT" ]; then
         UPDATED_EXTENSIONS=("${UPDATED_EXTENSIONS[@]}" "$dir $CURRENT_COMMIT $NEW_COMMIT")
     fi
+    echo ""
 done
 
 # If any extensions were updated, list name and commit hashes for each
 if [ ${#UPDATED_EXTENSIONS[@]} -gt 0 ]; then
-    echo "\nUpdated extensions:"
+    echo "Updated extensions:"
     for extension in "${UPDATED_EXTENSIONS[@]}"
     do
         echo "  $extension"
     done
 else
-    echo "\nNo updates."
+    echo "No extensions were updated."
 fi
